@@ -1,23 +1,51 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+//import DataTableExample from './service'
+import DataTableExample  from './datatable';
 
-function App() {
+const App = ()  => {
+
+  const [data, setData] = useState([])
+  const returnAsync = new Promise((resolve, reject) => {
+    setTimeout(() => {
+       resolve("Executing")
+    }, 3000)
+  })
+
+  async function callingAsync() {
+     await returnAsync.then((data) => {
+      console.log(data)
+    })
+    console.log("Execution completed")
+  }
+
+  callingAsync()
+
+
+useEffect(() => {
+  const url = "https://hn.algolia.com/api/v1/search?query=redux";
+
+  const fetchData = async () => {
+      try {
+          const response = await axios(url)
+          //const response = await fetch(url)
+          //const json = response.json()
+          setData(json);
+      } catch (error) {
+          console.log("error", error)
+      }
+  };
+
+  fetchData();
+}, []);
+ 
+console.log(data)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <DataTableExample />
     </div>
   );
 }
